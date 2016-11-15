@@ -34,6 +34,7 @@ C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\Cardi
 C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\obj\Debug\res\drawable\icon.png
 C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\obj\Debug\R.cs.flag
 C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\obj\Debug\uploadflags.txt
+C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\obj\Debug\CardioTech.Droid.csprojResolveAssemblyReference.cache
 C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\bin\Debug\CardioTech.Droid.dll.mdb
 C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\bin\Debug\Java.Interop.dll.mdb
 C:\Users\ggd95\documents\visual studio 2015\Projects\CardioTech\CardioTech\CardioTech.Droid\bin\Debug\Microsoft.CSharp.dll.mdb

@@ -57,7 +57,7 @@ namespace CardioTech.Views
         private Button btn = new Button();
         private Button autoCompleteBtn = new Button();
         
-        #region autoComplete Events
+        #region autoCompleteEvents
         private async void searchBarTextChanged(object sender, TextChangedEventArgs args)
         {
             if (args.NewTextValue != "")
@@ -96,7 +96,22 @@ namespace CardioTech.Views
             _autoComplete.ItemsSource = null;
         }
         #endregion
+        private void autoCompleteItemSelected(object sender, SelectedItemChangedEventArgs args)
+        {
+            // Set the BindingContext of the detail page.
+            try
+            {
+                Products p = (Products)args.SelectedItem;
+                this.searchBar.Text = p.name;
+                //hide the auto complete list
+                this.hideAutoComplete();
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private void itemSelected(object sender, SelectedItemChangedEventArgs args)
         {
             // Set the BindingContext of the detail page.
@@ -127,7 +142,7 @@ namespace CardioTech.Views
             autoCompleteBtn.Text = "Ocultar Resultado";
             autoCompleteBtn.TextColor = Color.Red;
             autoCompleteBtn.BackgroundColor = Color.White;
-            autoCompleteBtn.HeightRequest = 60;
+            autoCompleteBtn.HeightRequest = 45;
             autoCompleteBtn.Clicked += autoCompleteBtnClick;
             ViewModel = new ProductsViewModel();
             this.searchBar.TextChanged += new EventHandler<TextChangedEventArgs>(searchBarTextChanged);
@@ -155,8 +170,9 @@ namespace CardioTech.Views
             _autoComplete.SeparatorColor = Color.Red;
             _autoComplete.ItemTemplate = textCell;
             _autoComplete.IsVisible = false;
-            _autoComplete.MinimumHeightRequest = 250.0;
-            _autoComplete.HeightRequest = 250.0;
+            _autoComplete.MinimumHeightRequest = 180.0;
+            _autoComplete.HeightRequest = 180.0;
+            _autoComplete.ItemSelected += autoCompleteItemSelected;
             _autoComplete.VerticalOptions = LayoutOptions.FillAndExpand;
             Title = MasterPage.Title;
             Content = new StackLayout
