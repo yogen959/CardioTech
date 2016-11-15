@@ -27,7 +27,7 @@ namespace CardioTech.Views
             FontSize = 18
         };
 
-        private async void btnClick(object sender, EventArgs ea)
+        private void btnClick(object sender, EventArgs ea)
         {
         }
 
