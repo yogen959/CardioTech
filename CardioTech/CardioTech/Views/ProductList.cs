@@ -15,15 +15,28 @@ namespace CardioTech.Views
 
         private int limitProduct = 4;
 
-        private int limitAutocomplete = 3;
+        private int limitAutocomplete = 4;
 
         private ActivityIndicator _activityIndicator = new ActivityIndicator();
+
+        private ListView _list = new ListView();
+
+        private ListView _autoComplete = new ListView();
+
+        private Button btn = new Button();
+
+        private Button autoCompleteBtn = new Button();
+
+        /// <summary>
+        /// Flag para la seleccion del auto complete
+        /// </summary>
+        private bool autoCompleteSelected = false;
 
         private Label resultsLabel = new Label
         {
             Text = "Resultados apareceran aquí",
             VerticalOptions = LayoutOptions.FillAndExpand,
-            FontSize = 18
+            FontSize = 16
         };
 
         private SearchBar searchBar = new SearchBar
@@ -50,17 +63,10 @@ namespace CardioTech.Views
             this.hideAutoComplete();
         }
 
-        private ListView _list=new ListView();
-
-        private ListView _autoComplete = new ListView();
-
-        private Button btn = new Button();
-        private Button autoCompleteBtn = new Button();
-        
         #region autoCompleteEvents
         private async void searchBarTextChanged(object sender, TextChangedEventArgs args)
         {
-            if (args.NewTextValue != "")
+            if (args.NewTextValue != "" && autoCompleteSelected == false)
             {
                 _activityIndicator.IsRunning = true;
                 IEnumerable<Products> result = await ViewModel.GetResult(searchBar.Text, 1, limitAutocomplete);
@@ -85,8 +91,7 @@ namespace CardioTech.Views
                     autoCompleteBtn.IsVisible = false;
                 } 
                 _activityIndicator.IsRunning = false;
-            }
-            
+            }            
         }
 
         private void hideAutoComplete()
@@ -95,6 +100,7 @@ namespace CardioTech.Views
             _autoComplete.IsVisible = false;
             _autoComplete.ItemsSource = null;
         }
+
         #endregion
         private void autoCompleteItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
@@ -102,16 +108,18 @@ namespace CardioTech.Views
             try
             {
                 Products p = (Products)args.SelectedItem;
+                autoCompleteSelected = true;
                 this.searchBar.Text = p.name;
                 //hide the auto complete list
                 this.hideAutoComplete();
-
+                autoCompleteSelected = false;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
         private void itemSelected(object sender, SelectedItemChangedEventArgs args)
         {
             // Set the BindingContext of the detail page.
@@ -128,22 +136,26 @@ namespace CardioTech.Views
                 throw ex;
             }
         }
+
         MasterDetailPageDemoPage MasterPage;
         public ProductList(MasterDetailPageDemoPage Mp)
         {
             MasterPage = Mp;
-
+            //pagination button
             btn.Text = "Cargar más";
             btn.TextColor = Color.Red;
             btn.BackgroundColor = Color.White;
             btn.Clicked += btnClick;
             //AutoComplete Hide Button
             autoCompleteBtn.IsVisible = false;
-            autoCompleteBtn.Text = "Ocultar Resultado";
+            autoCompleteBtn.Text = "Ocultar";
             autoCompleteBtn.TextColor = Color.Red;
             autoCompleteBtn.BackgroundColor = Color.White;
-            autoCompleteBtn.HeightRequest = 45;
-            autoCompleteBtn.Clicked += autoCompleteBtnClick;
+            autoCompleteBtn.HeightRequest = 36;
+            autoCompleteBtn.FontSize = 10;
+            autoCompleteBtn.Margin = new Thickness(0, -4, 0, 0);
+            autoCompleteBtn.Clicked += autoCompleteBtnClick;            
+            //view model load
             ViewModel = new ProductsViewModel();
             this.searchBar.TextChanged += new EventHandler<TextChangedEventArgs>(searchBarTextChanged);
             this.searchBar.SearchCommand = new Command(new Action(searchProducts));
@@ -170,10 +182,11 @@ namespace CardioTech.Views
             _autoComplete.SeparatorColor = Color.Red;
             _autoComplete.ItemTemplate = textCell;
             _autoComplete.IsVisible = false;
-            _autoComplete.MinimumHeightRequest = 180.0;
-            _autoComplete.HeightRequest = 180.0;
+            _autoComplete.MinimumHeightRequest = 160.0;
+            _autoComplete.HeightRequest = 160.0;
+            _autoComplete.Margin = new Thickness(0, -10, 0, 0);
             _autoComplete.ItemSelected += autoCompleteItemSelected;
-            _autoComplete.VerticalOptions = LayoutOptions.FillAndExpand;
+            _autoComplete.VerticalOptions = LayoutOptions.Fill;
             Title = MasterPage.Title;
             Content = new StackLayout
             {
@@ -183,7 +196,7 @@ namespace CardioTech.Views
                         {
                             Text = "Buscador",
                             VerticalOptions = LayoutOptions.FillAndExpand,
-                            FontSize = 18
+                            FontSize = 17
                         },
                         searchBar,
                         _autoComplete,
@@ -192,7 +205,7 @@ namespace CardioTech.Views
                         _list,
                         btn
                     },
-                Padding = new Thickness(5, Device.OnPlatform(20, 0, 0), 5, 5)
+                Padding = new Thickness(5, Device.OnPlatform(10, 0, 0), 5, 5)
             };
             this.searchProducts();
         }
@@ -224,7 +237,6 @@ namespace CardioTech.Views
                 paginationLimit = -1;
                 btn.IsVisible = false;
             }
-
             _activityIndicator.IsRunning = false;
         }
 
