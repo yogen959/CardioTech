@@ -17,6 +17,7 @@ namespace CardioTech.Views
         };
         public MasterDetailPageDemoPage()
         {
+            this.BackgroundColor = Color.White;
             this.Title = header.Text;
             this.Master = new ProductList(this);
             this.Detail = new Product();

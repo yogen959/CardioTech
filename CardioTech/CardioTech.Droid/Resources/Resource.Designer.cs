@@ -3508,6 +3508,15 @@ namespace CardioTech.Droid
 			// aapt resource value: 0x7f0a001a
 			public const int CardView_Light = 2131361818;
 			
+			// aapt resource value: 0x7f0a0172
+			public const int CustomActionBarTheme = 2131362162;
+			
+			// aapt resource value: 0x7f0a0173
+			public const int MyActionBar = 2131362163;
+			
+			// aapt resource value: 0x7f0a0174
+			public const int MyTextAppearance = 2131362164;
+			
 			// aapt resource value: 0x7f0a0032
 			public const int Platform_AppCompat = 2131361842;
 			

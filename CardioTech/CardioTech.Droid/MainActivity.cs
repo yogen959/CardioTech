@@ -9,12 +9,14 @@ using Android.OS;
 
 namespace CardioTech.Droid
 {
-	[Activity (Label = "CardioTech", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity (Label = "CardioTech", Icon = "@drawable/icon", MainLauncher = true, 
+        Theme = "@style/CustomActionBarTheme",
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate (Bundle bundle)
 		{
-			base.OnCreate (bundle);
+            base.OnCreate (bundle);
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new CardioTech.App ());

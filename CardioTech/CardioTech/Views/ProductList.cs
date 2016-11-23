@@ -31,18 +31,8 @@ namespace CardioTech.Views
         /// Flag para la seleccion del auto complete
         /// </summary>
         private bool autoCompleteSelected = false;
-
-        private Label resultsLabel = new Label
-        {
-            Text = "Resultados apareceran aquí",
-            VerticalOptions = LayoutOptions.FillAndExpand,
-            FontSize = 16
-        };
-
-        private SearchBar searchBar = new SearchBar
-        {
-            Placeholder = "!Buscar por componentes o nombre de producto"
-        };
+        
+        private SearchBar searchBar = new SearchBar();
 
         private ProductsViewModel ViewModel
         {
@@ -68,7 +58,7 @@ namespace CardioTech.Views
         {
             if (args.NewTextValue != "" && autoCompleteSelected == false)
             {
-                _activityIndicator.IsRunning = true;
+                showActivityIndicator();
                 IEnumerable<Products> result = await ViewModel.GetResult(searchBar.Text, 1, limitAutocomplete);
                 if (result == null)
                 {
@@ -89,8 +79,8 @@ namespace CardioTech.Views
                 {
                     _autoComplete.IsVisible = false;
                     autoCompleteBtn.IsVisible = false;
-                } 
-                _activityIndicator.IsRunning = false;
+                }
+                hideActivityIndicator();
             }            
         }
 
@@ -137,6 +127,22 @@ namespace CardioTech.Views
             }
         }
 
+        public void showActivityIndicator()
+        {
+            _activityIndicator.IsVisible = true;
+            _activityIndicator.HeightRequest = 30;
+            _activityIndicator.IsRunning = true;
+            _list.Margin = new Thickness(0, 0, 0, 0);
+        }
+
+        public void hideActivityIndicator()
+        {
+            _activityIndicator.IsVisible = false;
+            _activityIndicator.HeightRequest = 0;
+            _activityIndicator.IsRunning = false;
+            _list.Margin = new Thickness(0, -5, 0, 0);
+        }
+
         MasterDetailPageDemoPage MasterPage;
         public ProductList(MasterDetailPageDemoPage Mp)
         {
@@ -157,8 +163,15 @@ namespace CardioTech.Views
             autoCompleteBtn.Clicked += autoCompleteBtnClick;            
             //view model load
             ViewModel = new ProductsViewModel();
-            this.searchBar.TextChanged += new EventHandler<TextChangedEventArgs>(searchBarTextChanged);
-            this.searchBar.SearchCommand = new Command(new Action(searchProducts));
+            //search bar set
+            searchBar.TextChanged += new EventHandler<TextChangedEventArgs>(searchBarTextChanged);
+            searchBar.SearchCommand = new Command(new Action(searchProducts));
+            searchBar.BackgroundColor = Color.White;
+            searchBar.PlaceholderColor = Color.Red;
+            searchBar.TextColor = Color.Red;
+            searchBar.FontSize = 16;
+            //searchBar.
+            searchBar.Placeholder = "Buscar por componentes o nombre de producto";
             //Image cell for search results
             var cell = new DataTemplate(typeof(ImageCell));
             cell.SetValue(TextCell.TextColorProperty, Color.Red);
@@ -175,6 +188,7 @@ namespace CardioTech.Views
             _list.BackgroundColor = Color.White;
             _list.SeparatorColor = Color.Red;
             _list.ItemTemplate = cell;
+            _list.VerticalOptions = LayoutOptions.Fill;
             // Define a selected handler for the ListView.
             _list.ItemSelected += itemSelected;
             //AutoComplete list configuration
@@ -184,20 +198,16 @@ namespace CardioTech.Views
             _autoComplete.IsVisible = false;
             _autoComplete.MinimumHeightRequest = 160.0;
             _autoComplete.HeightRequest = 160.0;
-            _autoComplete.Margin = new Thickness(0, -10, 0, 0);
             _autoComplete.ItemSelected += autoCompleteItemSelected;
             _autoComplete.VerticalOptions = LayoutOptions.Fill;
+            //configures a hidden activity indicator
+            hideActivityIndicator();
             Title = MasterPage.Title;
             Content = new StackLayout
             {
+                BackgroundColor = Color.Red,
                 Children =
                     {
-                        new Label
-                        {
-                            Text = "Buscador",
-                            VerticalOptions = LayoutOptions.FillAndExpand,
-                            FontSize = 17
-                        },
                         searchBar,
                         _autoComplete,
                         autoCompleteBtn,
@@ -205,21 +215,19 @@ namespace CardioTech.Views
                         _list,
                         btn
                     },
-                Padding = new Thickness(5, Device.OnPlatform(10, 0, 0), 5, 5)
+                Padding = new Thickness(5, Device.OnPlatform(20, 5, 0), 5, 5)
             };
             this.searchProducts();
         }
 
         public async void searchProducts()
         {
-            this.resultsLabel.Text = "Resultados: " + this.searchBar.Text;
             await GetData();
         }
 
         private async Task Paginate()
         {
-            _activityIndicator.IsRunning = true;
-
+            showActivityIndicator();
             IEnumerable<Products> result = await ViewModel.GetResult(this.searchBar.Text, this.paginationLimit, this.limitProduct);
             if (result == null)
             {
@@ -237,15 +245,13 @@ namespace CardioTech.Views
                 paginationLimit = -1;
                 btn.IsVisible = false;
             }
-            _activityIndicator.IsRunning = false;
+            hideActivityIndicator();
         }
 
         private async Task GetData()
         {
-            _activityIndicator.IsRunning = true;
-
+            showActivityIndicator();
             IEnumerable<Products> result = await ViewModel.GetResult(this.searchBar.Text, this.paginationLimit, this.limitProduct);
-
             if (result == null)
             {
                 await DisplayAlert("Hey?!", "No se pudo buscar la información", "Cancelar", "OK");
@@ -263,12 +269,9 @@ namespace CardioTech.Views
                     name = "No hubo resultados ...",
                     description = "Vacio"
                 });
-
                 _list.ItemsSource = emptyObject;
             }
-
-            _activityIndicator.IsRunning = false;
-
+            hideActivityIndicator();
         }
     }
 }
