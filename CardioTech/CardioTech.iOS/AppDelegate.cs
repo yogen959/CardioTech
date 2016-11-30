@@ -22,10 +22,15 @@ namespace CardioTech.iOS
 		//
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
+             
 			global::Xamarin.Forms.Forms.Init ();
 			LoadApplication (new CardioTech.App ());
-
-			return base.FinishedLaunching (app, options);
+            UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes()
+            {
+                TextColor = UIColor.Red                
+            });
+            UINavigationBar.Appearance.BackgroundColor = UIColor.White;
+            return base.FinishedLaunching (app, options);
 		}
 	}
 }
